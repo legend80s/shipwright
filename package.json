@@ -1,0 +1,40 @@
+{
+  "name": "shipwright",
+  "version": "0.0.0",
+  "description": "Check file count and package size against the last published version as baseline before you npm publish.",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "shipwright": "index.js"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit",
+    "check-files-to-publish": "node ./index.js --threshold=5 --throw --silent",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pub:patch": "npm version patch",
+    "pub:minor": "npm version minor",
+    "pub:major": "npm version major",
+    "preversion": "npm test && npm run typecheck && npm run check-files-to-publish",
+    "postversion": "npm publish && git push && git push --tags"
+  },
+  "keywords": [
+    "npm",
+    "publish",
+    "prepublish",
+    "npm-pack",
+    "tarball",
+    "file-count",
+    "package-size",
+    "check",
+    "cli",
+    "shipwright"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.20.3"
+  },
+  "dependencies": {
+    "walking-log": "^1.0.0"
+  }
+}

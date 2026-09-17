@@ -1,0 +1,19 @@
+{
+  "name": "test-playground",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "Test playground for shipwright",
+  "main": "index.js",
+  "scripts": {
+    "check-files-to-publish": "node ../index.js --threshold=5 --throw --silent",
+    "pub:patch": "npm version patch",
+    "pub:minor": "npm version minor",
+    "pub:major": "npm version major",
+    "preversion": "npm test && npm run typecheck && npm run check-files-to-publish",
+    "postversion": "npm publish && git push && git push --tags",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
