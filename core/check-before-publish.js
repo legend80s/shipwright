@@ -4,7 +4,7 @@
 import assert from "node:assert"
 import { execSync } from "node:child_process"
 import readline from "node:readline"
-import { colors } from "../utils/colors.js"
+import { colors, cyan, green, red } from "../utils/colors.js"
 import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
 
 /** @import { NpmPackDryRunJSONItem, NpmPackDryRunJSON, Logger, NpmPkgResp, NpmxPkgFilesResp } from './type.js' */
@@ -358,22 +358,4 @@ function printFilesStats(logger, files) {
   })
   // console.log(Object.fromEntries(sorted.map(([key, files]) => [key, files.length])))
   console.log()
-}
-
-/**
- * @param {string | number} val
- * @returns {string}
- */
-function red(val) {
-  return colors.RED + val + colors.RESET
-}
-
-/** @type {typeof red} */
-function green(val) {
-  return colors.GREEN + val + colors.RESET
-}
-
-/** @type {typeof red} */
-function cyan(val) {
-  return colors.CYAN + val + colors.RESET
 }
