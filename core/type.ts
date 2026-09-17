@@ -21,7 +21,7 @@ export type Logger = {
 // model types
 export type NpmPackDryRunJSON = NpmPackDryRunJSONItem[]
 
-export type NpmPackDryRunJSONItem = {
+export type NpmPackDryRunJSONItem = Readonly<{
   id: string
   name: string
   version: string
@@ -30,10 +30,10 @@ export type NpmPackDryRunJSONItem = {
   shasum: string
   integrity: string
   filename: string
-  files: File[]
+  files: Readonly<Readonly<File>[]>
   entryCount: number
   bundled: []
-}
+}>
 
 interface File {
   path: string
@@ -286,11 +286,11 @@ type BinaryFile = CommonFile & {
 //     }
 //   ]
 // }
-export type NpmxPkgFilesResp = {
+export type NpmxPkgFilesResp = Readonly<{
   package: string
   version: string
-  tree: Node[]
-}
+  tree: Readonly<Node>[]
+}>
 
 type Node = FileNode | DirectoryNode
 

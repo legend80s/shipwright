@@ -26,27 +26,52 @@ const PACK_DRY_RUN_CMD = `npm pack --dry-run`
 export async function check(values, logger) {
   const { verbose, name: pkgName } = values
 
-  const { diff, version, totalFiles, prevFileCount, prevVersion, files } = await fetchDiff(
-    pkgName,
-    verbose,
-    logger,
-  )
+  const {
+    diff,
+    version,
+    totalFiles,
+    prevFileCount,
+    prevVersion,
+    files,
+    prevUnpackedSize,
+    unpackedSize,
+  } = await fetchDiff(pkgName, verbose, logger)
   if (prevVersion === null) {
     logger.success(`✅ New package: no previous version found. Ready to publish!`)
     return
   }
 
-  const threshold = Number(values.threshold)
+  const threshold = {
+    fileCount: Number(values.threshold),
+    unpackedSize: Number(values.pacakgeSizeThreshold),
+  }
 
-  if (Math.abs(diff) >= threshold) {
-    handleThresholdExceeded()
+  if (Math.abs(diff.fileCount) >= threshold.fileCount) {
+    handleFileCountThresholdExceeded()
+  } else if (Math.abs(diff.unpackedSize) >= threshold.unpackedSize) {
+    handlePackageSizeThresholdExceeded()
   } else {
     logger.success(
-      `✅ File count check success: diff (${Math.abs(diff)}) < threshold (${threshold}). Ready to publish!`,
+      `✅ File count check success: diff (${Math.abs(diff.fileCount)}) < threshold (${threshold.fileCount}). Ready to publish!`,
     )
   }
 
-  async function handleThresholdExceeded() {
+  function handlePackageSizeThresholdExceeded() {
+    const msg1 =
+      `To publish ` +
+      red(`v${version}`) +
+      ` package size is ${red(unpackedSize)}, but previous published ` +
+      green(`v${prevVersion}`) +
+      ` package size is ${green(prevUnpackedSize)}.`
+    logger.error(colors.RESET + msg1 + colors.RESET)
+
+    const msg2 = `The diff (Math.abs(${unpackedSize} - ${prevUnpackedSize}) / ${{ prevUnpackedSize }} = ${diff}) ${red("❯")} threshold (${threshold.unpackedSize}).`
+    logger.error(colors.RESET + msg2 + colors.RESET)
+
+    showConfirm()
+  }
+
+  function handleFileCountThresholdExceeded() {
     const msg1 =
       `To publish ` +
       red(`v${version}`) +
@@ -60,7 +85,11 @@ export async function check(values, logger) {
 
     printFilesStats(logger, files)
 
-    const msg3 = `This usually shows sign of error which means there are too many files missing or too many extra files added by mistake.`
+    showConfirm()
+  }
+
+  async function showConfirm() {
+    const msg3 = `This usually means an error — too many files missing or too many extra files added. Please review the changes run \`${PACK_DRY_RUN_CMD}\` and make sure it's intentional.`
     logger.error(msg3)
 
     const isInteractive = process.stdin.isTTY
@@ -120,16 +149,34 @@ async function fetchDiff(pkgName, verbose, logger) {
 async function fetchDiffCore(pkgName, logger) {
   logger.info(`Start checking file count for`, pkgName)
 
-  const { latestVersionFileCount: prevFileCount, latestVersion: prevVersion } =
-    await getPrevPublishedFilesCount(pkgName, logger)
+  const {
+    latestVersionFileCount: prevFileCount,
+    latestVersion: prevVersion,
+    latestVersionUnpackedSize: prevUnpackedSize,
+  } = await getPrevPublishedFilesCount(pkgName, logger)
 
   if (prevFileCount === null) {
-    return { diff: 0, prevVersion: null, prevFileCount: 0, totalFiles: 0, version: null, files: [] }
+    return /** @type {const} */ ({
+      diff: { fileCount: 0, unpackedSize: 0 },
+      prevVersion: null,
+      prevFileCount: 0,
+      prevUnpackedSize: 0,
+      totalFiles: 0,
+      version: null,
+      files: [],
+      unpackedSize: 0,
+    })
   }
 
-  logger.info(`Previous published v${prevVersion} file count:`, prevFileCount)
+  logger.info(`Previous published v${prevVersion}:`, { prevFileCount, prevUnpackedSize })
 
-  const { name, entryCount: totalFiles, version, files } = await fetchToPublishInfo(pkgName)
+  const {
+    name,
+    entryCount: totalFiles,
+    version,
+    files,
+    unpackedSize,
+  } = await fetchToPublishInfo(pkgName)
 
   const msgWrongDir = `Check if \`${PACK_DRY_RUN_CMD}\` ran in the wrong directory.`
   if (name !== pkgName) {
@@ -138,17 +185,29 @@ async function fetchDiffCore(pkgName, logger) {
     )
   }
 
-  const diff = totalFiles - prevFileCount
+  const diffFileCount = totalFiles - prevFileCount
 
   logger.info(
     `To publish file count:`,
     totalFiles,
     "\b. File count diff:",
-    diff,
+    diffFileCount,
     `(= ${totalFiles} - ${prevFileCount})`,
   )
 
-  return { diff, prevVersion, prevFileCount, totalFiles, version, files }
+  const diffUnpackedSize = unpackedSize - prevUnpackedSize
+
+  return {
+    diff: { fileCount: diffFileCount, unpackedSize: diffUnpackedSize },
+    prevVersion,
+    prevFileCount,
+    prevUnpackedSize,
+
+    totalFiles,
+    version,
+    files,
+    unpackedSize,
+  }
 }
 
 /**
@@ -182,7 +241,7 @@ function confirmInteractive(logger, question) {
  * Returns the previous published files count and version. If no previous version is found, returns null.
  * @param {string} pkgName
  * @param {Logger} logger
- * @returns {Promise<{ latestVersionFileCount: int, latestVersion: string } | { latestVersionFileCount: null, latestVersion: null }>}
+ * @returns {Promise<{ latestVersionFileCount: int, latestVersion: string; latestVersionUnpackedSize: int } | { latestVersionFileCount: null, latestVersion: null; latestVersionUnpackedSize: null }>}
  */
 async function getPrevPublishedFilesCount(pkgName, logger) {
   // mock code for testing to avoid rate limit
@@ -190,6 +249,7 @@ async function getPrevPublishedFilesCount(pkgName, logger) {
     return {
       latestVersion: "1.2.0",
       latestVersionFileCount: 83,
+      latestVersionUnpackedSize: 16979,
     }
   }
   // read from npm registry
@@ -203,23 +263,27 @@ async function getPrevPublishedFilesCount(pkgName, logger) {
     return {
       latestVersion: null,
       latestVersionFileCount: null,
+      latestVersionUnpackedSize: null,
     }
   }
 
   const latestVersion = json["dist-tags"].latest
-  let latestVersionFileCount =
+  let { fileCount: latestVersionFileCount, unpackedSize: latestVersionUnpackedSize } =
     // @ts-expect-error
-    json.versions[latestVersion].dist.fileCount
+    json.versions[latestVersion].dist
 
   if (!latestVersionFileCount) {
     logger.warn(
       `pkg exists but file count of the latest version ${latestVersion} is undefined by ${api}.`,
     )
 
-    latestVersionFileCount = await fetchFileCount(pkgName, latestVersion, logger)
+    const stats = await fetchFileStats(pkgName, latestVersion, logger)
+
+    latestVersionFileCount = stats.fileCount
+    latestVersionUnpackedSize = stats.unpackedSize
   }
 
-  return { latestVersionFileCount, latestVersion }
+  return { latestVersionFileCount, latestVersion, latestVersionUnpackedSize }
 }
 
 /**
@@ -227,9 +291,9 @@ async function getPrevPublishedFilesCount(pkgName, logger) {
  * @param {string} pkgName
  * @param {string} version
  * @param {Logger} logger
- * @return {Promise<int>}
+ * @return {Promise<{ fileCount: int; unpackedSize: int}>}
  */
-async function fetchFileCount(pkgName, version, logger) {
+async function fetchFileStats(pkgName, version, logger) {
   // 1. Fetch from npm registry: 403
   // let api = `https://www.npmjs.com/package/${pkgName}/v/${version}/index`
 
@@ -258,7 +322,7 @@ async function fetchFileCount(pkgName, version, logger) {
     throw new Error(`❌ pkg files fetch failed by ${api} and ${api}`)
   }
 
-  return countFiles(json.tree)
+  return accumulateFiles(json.tree)
   // }
 
   // return json.fileCount
@@ -267,28 +331,31 @@ async function fetchFileCount(pkgName, version, logger) {
 /**
  * 递归统计树中所有文件（type === "file"）的数量。
  * @param {NpmxPkgFilesResp['tree']} nodes - 节点数组，每个节点可能是 file 或 directory
- * @returns {number} 文件总数
+ * @returns {{ fileCount: int; unpackedSize: int;}} 文件总数
  */
-function countFiles(nodes) {
-  let count = 0
+export function accumulateFiles(nodes) {
+  let fileCount = 0
+  let unpackedSize = 0
 
   for (const node of nodes) {
+    unpackedSize += node.size
+
     if (node.type === "file") {
-      count += 1
+      fileCount += 1
     } else if (node.type === "directory" && Array.isArray(node.children)) {
-      count += countFiles(node.children)
+      fileCount += accumulateFiles(node.children).fileCount
     } else {
       console.error(`Unexpected node type: ${node.type}, node:`, node)
       throw new TypeError(`Unexpected node type: ${node.type}`)
     }
   }
 
-  return count
+  return { fileCount, unpackedSize }
 }
 
 /**
  * @param {string} pkgName
- * @returns {Promise<Pick<NpmPackDryRunJSONItem, 'name' | 'version' | 'entryCount' | 'files'>>}
+ * @returns {Promise<Pick<NpmPackDryRunJSONItem, 'name' | 'version' | 'entryCount' | 'files' | 'unpackedSize'>>}
  */
 async function fetchToPublishInfo(pkgName) {
   if (testing) {
@@ -298,6 +365,7 @@ async function fetchToPublishInfo(pkgName) {
       version: "1.3.0",
       entryCount,
       files: new Array(entryCount),
+      unpackedSize: 16979,
     }
   }
   const stdout = execSync(`${PACK_DRY_RUN_CMD} --json`).toString("utf-8")
@@ -320,7 +388,7 @@ function isDir(filepath) {
 
 /**
  * @param {Logger} logger
- * @param {File[]} files
+ * @param {Readonly<Readonly<File>[]>} files
  */
 function printFilesStats(logger, files) {
   // group by second level dir if no second level dir use first lever fallback to whole file name
