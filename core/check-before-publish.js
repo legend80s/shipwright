@@ -4,6 +4,7 @@
 import assert from "node:assert"
 import { execSync } from "node:child_process"
 import readline from "node:readline"
+import { styleText } from "node:util"
 import { colors, cyan, green, red } from "../utils/colors.js"
 import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
 
@@ -14,7 +15,8 @@ import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
 /** @typedef {`${string}/${string}`} Directory */
 
 const testing = false
-const overlimit = true
+const fileCountOverlimit = false
+const packageSizeOverlimit = true
 
 const PACK_DRY_RUN_CMD = `npm pack --dry-run`
 
@@ -42,13 +44,16 @@ export async function check(values, logger) {
   }
 
   const threshold = {
-    fileCount: Number(values.threshold),
-    unpackedSize: Number(values.pacakgeSizeThreshold),
+    fileCount: Number(values["threshold-file-count"]),
+    unpackedSize: Number(values["threshold-package-size"]),
   }
 
-  if (Math.abs(diff.fileCount) >= threshold.fileCount) {
+  const isFileCountOverThreshold = Math.abs(diff.fileCount) >= threshold.fileCount
+  const isPackageSizeOverThreshold = Math.abs(diff.unpackedSize) >= threshold.unpackedSize
+
+  if (isFileCountOverThreshold) {
     handleFileCountThresholdExceeded()
-  } else if (Math.abs(diff.unpackedSize) >= threshold.unpackedSize) {
+  } else if (isPackageSizeOverThreshold) {
     handlePackageSizeThresholdExceeded()
   } else {
     logger.success(
@@ -62,10 +67,10 @@ export async function check(values, logger) {
       red(`v${version}`) +
       ` package size is ${red(unpackedSize)}, but previous published ` +
       green(`v${prevVersion}`) +
-      ` package size is ${green(prevUnpackedSize)}.`
+      ` size is ${green(prevUnpackedSize)}.`
     logger.error(colors.RESET + msg1 + colors.RESET)
 
-    const msg2 = `The diff (Math.abs(${unpackedSize} - ${prevUnpackedSize}) / ${{ prevUnpackedSize }} = ${diff}) ${red("❯")} threshold (${threshold.unpackedSize}).`
+    const msg2 = `Package size diff ${diff.unpackedSize}% ${red("❯=")} threshold ${threshold.unpackedSize}%.`
     logger.error(colors.RESET + msg2 + colors.RESET)
 
     showConfirm()
@@ -80,7 +85,7 @@ export async function check(values, logger) {
       ` file count is ${green(prevFileCount)}.`
     logger.error(colors.RESET + msg1 + colors.RESET)
 
-    const msg2 = `The diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff}) ${red("❯")} threshold (${threshold}).`
+    const msg2 = `File count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${threshold.fileCount}).`
     logger.error(colors.RESET + msg2 + colors.RESET)
 
     printFilesStats(logger, files)
@@ -89,32 +94,45 @@ export async function check(values, logger) {
   }
 
   async function showConfirm() {
-    const msg3 = `This usually means an error — too many files missing or too many extra files added. Please review the changes run \`${PACK_DRY_RUN_CMD}\` and make sure it's intentional.`
+    const msg3 = `This usually means an error — too many files missing or too many extra files added. Please review the changes and make sure it's intentional.`
     logger.error(msg3)
 
     const isInteractive = process.stdin.isTTY
 
     const fileCountOverThresholdError = `FileCountOverThresholdError: Previous published file count (${prevFileCount}) is too different from to publish file count (${totalFiles}).`
+    const packageSizeOverThresholdError = `PackageSizeOverThresholdError: Previous published package size (${prevUnpackedSize}) is too different from to publish package size (${unpackedSize}).`
+
+    let errMsg = ""
+
+    if (isFileCountOverThreshold) {
+      errMsg = fileCountOverThresholdError
+    } else if (isPackageSizeOverThreshold) {
+      errMsg = packageSizeOverThresholdError
+    } else {
+      throw new Error(
+        "showConfirm should only be called when isFileCountOverThreshold or isPackageSizeOverThreshold is true",
+      )
+    }
 
     if (!isInteractive) {
       logger.debug("Not interactive mode")
       if (values.throw) {
         logger.debug("  Exit with error")
-        throw new Error(fileCountOverThresholdError)
+        throw new Error(errMsg)
       }
 
       logger.debug("  Exit with error log only")
     } else {
       console.log()
-      console.log(`1. Confirm the files above to publish are all expected.`)
+      console.log(`${styleText("cyan", "1.")} Confirm the files above to publish are all expected.`)
       const answer = await confirmInteractive(
         logger,
-        `2. If it's OK to continue publishing enter "yes", "n" to abort.\n${cyan("❯")} `,
+        `${styleText("cyan", "2.")} If it's OK to continue publishing enter "yes", "n" to abort.\n${cyan("❯")} `,
       )
       if (answer !== "yes") {
         logger.debug("Aborted by user.\n")
 
-        throw new Error(fileCountOverThresholdError)
+        throw new Error(errMsg)
       }
     }
   }
@@ -187,18 +205,26 @@ async function fetchDiffCore(pkgName, logger) {
 
   const diffFileCount = totalFiles - prevFileCount
 
+  // diffUnpackedSizeInPercent can be negative
+  const diffUnpackedSizeInPercent = Number(
+    (((unpackedSize - prevUnpackedSize) / prevUnpackedSize) * 100).toFixed(0),
+  )
+
   logger.info(
     `To publish file count:`,
     totalFiles,
+    "unpacked size:",
+    unpackedSize,
     "\b. File count diff:",
     diffFileCount,
     `(= ${totalFiles} - ${prevFileCount})`,
+    "\b. Unpacked size diff:",
+    diffUnpackedSizeInPercent,
+    `\b% (= (${unpackedSize} - ${prevUnpackedSize}) / ${prevUnpackedSize} * 100)`,
   )
 
-  const diffUnpackedSize = unpackedSize - prevUnpackedSize
-
   return {
-    diff: { fileCount: diffFileCount, unpackedSize: diffUnpackedSize },
+    diff: { fileCount: diffFileCount, unpackedSize: diffUnpackedSizeInPercent },
     prevVersion,
     prevFileCount,
     prevUnpackedSize,
@@ -359,13 +385,14 @@ export function accumulateFiles(nodes) {
  */
 async function fetchToPublishInfo(pkgName) {
   if (testing) {
-    const entryCount = overlimit ? 659 : 86
+    const entryCount = fileCountOverlimit ? 659 : 86
+    const unpackedSize = packageSizeOverlimit ? 18979 : 16978
     return {
       name: pkgName,
       version: "1.3.0",
       entryCount,
       files: new Array(entryCount),
-      unpackedSize: 16979,
+      unpackedSize,
     }
   }
   const stdout = execSync(`${PACK_DRY_RUN_CMD} --json`).toString("utf-8")

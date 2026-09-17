@@ -107,6 +107,8 @@ async function main() {
   // biome-ignore lint/suspicious/noAssignInExpressions: more concise than if-else
   !values.name && (values.name = name)
 
+  // return console.log("values:", values)
+
   await check(values, logger)
 }
 
