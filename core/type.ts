@@ -1,10 +1,14 @@
+// primitive types
+export type int = number
+
 // cli types
-export type CliValues = {
-  verbose: boolean
-  threshold: string
-  silent: boolean
-  throw: boolean
-}
+// export type CliValues = {
+//   verbose: boolean
+//   threshold: string
+//   silent: boolean
+//   throw: boolean
+//   name: string
+// }
 
 export type Logger = {
   debug: (...args: unknown[]) => void
@@ -148,7 +152,7 @@ type Scripts = Record<string, string>
 interface Dist {
   shasum: string
   tarball: string
-  fileCount: number
+  fileCount?: number
   integrity: string
   signatures: Signature[]
   unpackedSize: number
@@ -160,3 +164,148 @@ interface Signature {
 }
 
 type Bin = Record<string, string>
+
+// https://www.npmjs.com/package/shipwright/v/0.1.2/index
+export type NpmPkgFilesResp = {
+  files: Files
+  totalSize: number
+  fileCount: number
+  shasum: string
+  integrity: string
+}
+
+type Path = `/${string}`
+
+type Files = {
+  "/package.json": TextFile
+  "/README.md": TextFile
+  // "/shipwright.jpg": BinaryFile
+  [path: Path]: TextFile | BinaryFile
+}
+
+type CommonFile = {
+  size: int
+  type: string
+  path: Path
+  contentType: `${string}/${string}`
+  hex: string
+}
+
+// TextFile sample
+// {
+//   "size": 500,
+//   "type": "File",
+//   "path": "/bin/claude.exe",
+//   "contentType": "application/octet-stream",
+//   "hex": "6d7abae055d3b598281300a6c835086dec81bf3048f8a2294c5d3e50c8830d7b",
+//   "isBinary": "false",
+//   "linesCount": 11
+// }
+type TextFile = CommonFile & {
+  isBinary: "false"
+  linesCount: int
+}
+
+// BinaryFile sample
+// {
+//   "size": 109001,
+//   "type": "File",
+//   "path": "/shipwright.jpg",
+//   "contentType": "image/jpeg",
+//   "hex": "c1da9f7a24de13fbb83a2cf394123ad20ef8f99f6eb4dee5e359e3ac5b193ba2",
+//   "isBinary": "true"
+// }
+type BinaryFile = CommonFile & {
+  isBinary: "true"
+}
+
+/**
+ * https://npmx.dev/api/registry/files/shipwright/v/0.1.2
+ */
+// File sample
+// {
+//   "package": "@anthropic-ai/claude-code",
+//   "version": "2.1.274",
+//   "tree": [
+//     {
+//       "name": "bin",
+//       "path": "bin",
+//       "type": "directory",
+//       "size": 500,
+//       "children": [
+//         {
+//           "name": "claude.exe",
+//           "path": "bin/claude.exe",
+//           "type": "file",
+//           "hash": "bXq64FXTtZgoEwCmyDUIbeyBvzBI+KIpTF0+UMiDDXs=",
+//           "size": 500
+//         }
+//       ]
+//     },
+//     {
+//       "name": "cli-wrapper.cjs",
+//       "path": "cli-wrapper.cjs",
+//       "type": "file",
+//       "hash": "Ya1jAz2cgVXV5gop9F3EZlr6B2McCxCOYsyDv0W6SQ4=",
+//       "size": 4997
+//     },
+//     {
+//       "name": "install.cjs",
+//       "path": "install.cjs",
+//       "type": "file",
+//       "hash": "XLqxZwWX9JLNTuuUbzw0Tryx+9Q8YjuhksmzN0RGG4U=",
+//       "size": 7196
+//     },
+//     {
+//       "name": "LICENSE.md",
+//       "path": "LICENSE.md",
+//       "type": "file",
+//       "hash": "jOlLlHi7mGj5ZB+BjgbNci++VdTCLi0u0RlxsgFGFzo=",
+//       "size": 147
+//     },
+//     {
+//       "name": "package.json",
+//       "path": "package.json",
+//       "type": "file",
+//       "hash": "ay8eftUcecSL+e+QSKFvWyTfAkbHMrOf8p+3ZFI1wbE=",
+//       "size": 1476
+//     },
+//     {
+//       "name": "README.md",
+//       "path": "README.md",
+//       "type": "file",
+//       "hash": "2nzxXOTjW61qEHrNaja0/gUggwaLueVksao/IHi10M4=",
+//       "size": 2037
+//     },
+//     {
+//       "name": "sdk-tools.d.ts",
+//       "path": "sdk-tools.d.ts",
+//       "type": "file",
+//       "hash": "cV8xlSzwR5WdzWlcVHHHuzZ1mmpQ3+dN8d6zdMVph0U=",
+//       "size": 168249
+//     }
+//   ]
+// }
+export type NpmxPkgFilesResp = {
+  package: string
+  version: string
+  tree: Node[]
+}
+
+type Node = FileNode | DirectoryNode
+
+type CommonNode = {
+  name: string
+  path: string
+  size: int
+}
+
+type DirectoryNode = CommonNode & {
+  type: "directory"
+  children: Node[]
+}
+
+type FileNode = CommonNode & {
+  type: "file"
+  hash: string
+}

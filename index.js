@@ -2,7 +2,7 @@ import { parseArgs } from "node:util"
 import { createLogger, LEVEL } from "walking-log"
 import { check } from "./core/check-before-publish.js"
 
-/** @import { NpmPackDryRunJSONItem, NpmPackDryRunJSON } from './core/type.js' */
+/** @import { NpmPackDryRunJSONItem } from './core/type.js' */
 
 /** @typedef {number} int */
 /** @typedef {NpmPackDryRunJSONItem['files'][0]} File */
@@ -19,6 +19,11 @@ const { values } = parseArgs({
       default: false,
     },
     // TODO version and help
+    name: {
+      type: "string",
+      description: "the name of the package",
+      default: "",
+    },
     threshold: {
       type: "string",
       default: String(DEFAULT_THRESHOLD),
@@ -44,7 +49,25 @@ const logger = createLogger({
 })
 
 async function main() {
+  const name =
+    values.name ||
+    process.env.npm_package_name ||
+    (await import("./package.json", { with: { type: "json" } }).then((pkg) => pkg.default.name))
+
+  if (!name) {
+    throw new TypeError(
+      "Package `name` is not specified, `shipwright` should be run in the root of the package to be published.",
+    )
+  }
+
+  // biome-ignore lint/suspicious/noAssignInExpressions: more concise than if-else
+  !values.name && (values.name = name)
+
   await check(values, logger)
 }
 
 main()
+
+/**
+ * @typedef {typeof values} CliValues
+ */

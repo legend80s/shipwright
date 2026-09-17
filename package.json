@@ -1,15 +1,16 @@
 {
-  "name": "shipwright",
+  "name": "npm-shipwright",
   "version": "0.0.0",
-  "description": "Check file count and package size against the last published version as baseline before you npm publish.",
+  "description": "🚢 Shipwright: Check file count and package size against the last published version as baseline before you npm publish.",
   "type": "module",
   "main": "index.js",
   "bin": {
     "shipwright": "index.js"
   },
   "scripts": {
-    "typecheck": "tsgo --noEmit",
-    "check-files-to-publish": "node ./index.js --threshold=5 --throw --silent",
+    "typecheck": "tsgo --noEmit --resolveJsonModule",
+    "info": "echo 正在运行 %npm_package_name%",
+    "check-files-to-publish": "node ./index.js --name=%npm_package_name% --threshold=5 --throw --no-silent",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pub:patch": "npm version patch",
     "pub:minor": "npm version minor",

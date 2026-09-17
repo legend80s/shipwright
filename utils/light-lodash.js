@@ -11,7 +11,13 @@ export async function fetchJSON(url, { label, verbose = false } = {}) {
   if (verbose) {
     console.log(`${YELLOW}  [fetchJSON]`, label, url, RESET)
   }
-  const res = await fetch(url)
+  const res = await fetch(url, {
+    // headers: {
+    //   // set User-Agent: curl/8.17.0
+    //   "User-Agent": "curl/8.17.0",
+    //   Accept: "application/json",
+    // },
+  })
 
   label = label ? ` ${label}` : ""
 
@@ -30,12 +36,14 @@ export async function fetchJSON(url, { label, verbose = false } = {}) {
 /**
  * @template T
  * @param {() => Promise<T>} asyncFunc
+ * @param {{ onError?: (error: Error) => void }} options
  * @returns {Promise<T | null>}
  */
-async function safeAsyncCall(asyncFunc) {
+export async function safeAsyncCall(asyncFunc, { onError = () => {} } = {}) {
   try {
     return await asyncFunc()
-  } catch (_error) {
+  } catch (error) {
+    onError(/** @type {Error} */ (error))
     return null
   }
 }
