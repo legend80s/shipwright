@@ -1,8 +1,13 @@
 # shipwright
 
+<div align="center" style="display: flex; justify-content: space-around; align-items: center">
+  <img width="40%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
+  <img width="25%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
+</div>
+
 > Ship it right and don't ship unexpected files.
 >
-> Count and weigh your package before you ship it.
+> Count and weigh your package before you publish it.
 
 ## Why "shipwright"?
 
