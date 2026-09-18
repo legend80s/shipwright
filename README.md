@@ -2,8 +2,8 @@
 
 <div align="center" style="display: flex; justify-content: space-around; align-items: center">
   <img width="20%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
-  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-  <img valign="top" width="12%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+  <img valign="top" width="11%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
 </div>
 
 > Ship it right and don't ship unexpected files.
@@ -30,10 +30,10 @@ That is exactly what this tool does before `npm publish`: **counting** files and
 Before running `npm publish`, `shipwright` compares the package you're about to
 publish against the **previously published version**, on two dimensions:
 
-1. **File count** — from `npm pack --dry-run`.
-2. **Package size** — the packed tarball size and/or unpacked size.
+1. **File count** — from `npm pack --dry-run --json`.
+2. **Package size** — the unpacked size from `npm pack --dry-run --json`.
 
-It fetches the previous version's file count and size from the npm registry, and
+It fetches the previous version's file count and size from the [npm registry](https://registry.npmjs.org/<pacakge-name>), and
 exits with an error if either metric deviates beyond a configurable threshold.
 
 Checking size matters as much as checking count. The two failure modes are
@@ -51,17 +51,9 @@ Together they cover each other's blind spots.
 
 ## Why both
 
-The Claude Code leak in March 2026 is the cautionary tale. A single stray file —
-a 59.8 MB source map — rode along in the published npm package and exposed the
-entire proprietary codebase. The file count barely moved: one file in, one file
-out of a large package is easy to miss. But the **size** would have screamed.
-A tarball that suddenly grows by tens of megabytes is a five-alarm signal.
+The Claude Code leak in March 2026 is the cautionary tale. **A single** stray file — a 59.8 MB source map — rode along in the published npm package and exposed the entire proprietary codebase. The file count barely moved: one file sneak into a large package is easy to miss. But the **size** would have screamed. A tarball that suddenly grows by tens of megabytes is a five-alarm signal.
 
-Neither check alone would have caught every possible mistake. A size check alone
-misses the case where a secret file of normal size replaces a normal file. A count
-check alone misses the case where a huge file is added while an equally huge file
-is removed. Run both, and the tarball has to pass two independent gates before
-it ships.
+Neither check alone would have caught every possible mistake. **A count check** (default threshold: `5`) alone misses the case where a huge file is added or removed. **A size check** (default threshold: `10%`) alone misses the case where many small files are added or removed.
 
 ## Usage
 
@@ -89,11 +81,7 @@ Add the following to your `package.json`:
 }
 ```
 
-Or use it like in the `package.json` example [here](https://github.com/legend80s/my-npm-dashboard/blob/main/src/package.json#L13).
-
-### Usage #3: As a linter
-
-> TODO: not implemented yet.
+Or use it in the `package.json` [example here](https://github.com/legend80s/my-npm-dashboard/blob/main/src/package.json#L13).
 
 ## Philosophy
 
@@ -101,4 +89,4 @@ Ship intentionally. Count before you publish. Weigh before you sail.
 
 ## TODO
 
-- [ ] Add linter support. Maybe name as `eslint-plugin-publish`.
+- [x] ~~Works as a linter. Maybe name as `eslint-plugin-publish`.~~ It is not fit for a linter because the check takes seconds. It will run `npm pack --dry-run --json` and fetch the baseline from npm registry. So too heavy for linter.
