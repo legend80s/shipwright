@@ -64,7 +64,8 @@ Then there's Anthropic's Claude Code, where a packaging misconfiguration acciden
 Packaging misconfiguration are easy to make because they're made by humans. Could there be a tool that catches abnormal changes in file count and package size *before* a bad publish goes out — even when packaging config is wrong — and blocks the releases that might have become serious incidents?
 
 > [!IMPORTANT]
-> Ship intentionally. Count before you publish. Weigh before you sail. Never let your ship grow too much.
+> Ship intentionally. Count before you publish. Weigh before you sail.
+> If the cargo count suddenly grows or shrinks, or if the weight suddenly rises or falls — watch out!
 
 ## How It Works
 
@@ -73,7 +74,7 @@ Before running `npm publish`, `shipwright` compares the package you're about to 
 1. **File count** — from `npm pack --dry-run --json`.
 2. **Package size** — the unpacked size from `npm pack --dry-run --json`.
 
-It fetches the previous version's file count and size from the [npm registry](https://registry.npmjs.org/<package-name>) (fallback to [npmx](https://npmx.dev/api/registry/files/<package-name>/v/<version>) when needed) and using them as the baseline. And it exits with an error if either value drifts too far from the last release beyond a configurable threshold.
+It fetches the previous version's file count and size from the [npm registry](https://registry.npmjs.org/<package-name>) (fallback to [npmx](https://npmx.dev/api/registry/files/<package-name>/v/<version>) when needed) and uses them as the baseline. It exits with an error if either value drifts too far from the last release beyond a configurable threshold.
 
 ## Why Both
 
@@ -84,7 +85,7 @@ Checking size matters as much as checking count. The two failure modes are diffe
 
 Together they cover each other's blind spots.
 
-The Claude Code leak in March 2026 is the cautionary tale. **A single** stray file — a 59.8 MB source map — rode along in the published npm package and exposed the entire proprietary codebase. The file count barely moved: one file sneak into a large package is easy to miss. But the **size** would have screamed. A tarball that suddenly grows by tens of megabytes is a five-alarm signal.
+The Claude Code leak in March 2026 is the cautionary tale. **A single** stray file — a 57 MB source map — rode along in the published npm package and exposed the entire proprietary codebase. The file count barely moved: one file sneak into a large package is easy to miss. But the **size** would have screamed. A tarball that suddenly grows by tens of megabytes is a five-alarm signal.
 
 Neither check alone would have caught every possible mistake. **A count check** (default threshold: `5`) alone misses the case where a huge file is added or removed. **A size check** (default threshold: `10%`) alone misses the case where many tiny files are added or removed by mistake.
 
