@@ -1,10 +1,12 @@
-# shipwright
+<h1 align="center">shipwright</h1>
 
 <div align="center" style="display: flex; justify-content: space-around; align-items: center">
   <img width="20%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
-  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-  <img valign="top" width="11%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+  <img valign="super" width="11%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
 </div>
+
+[English](./README.md) | 中文
 
 > Ship it right and don't ship unexpected files or let files supposed to ship missing in tarball.
 >
@@ -17,3 +19,7 @@
 还有就是 Anthropic 的 Claude Code 因打包配置错误，将一个 57 MB 的 source map 文件（cli.js.map）意外打包进了公开发布的 npm 包中。
 
 打包配置容易发生错误，因为是人为的，能否有一个工具在即使配置错误，仍能在误发布之前尽可能检测到异常的文件数量变化和包体积变化，从而拦截这些可能酿成重大事故的发布呢？
+
+## Philosophy
+
+人容易犯错而工具不会，“发布时慎重”的叮嘱长期来看只是徒劳，因为事情有紧急人会疲劳注意力会分散，让工具和流程守住底线才是正道。

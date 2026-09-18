@@ -2,9 +2,11 @@
 
 <div align="center" style="display: flex; justify-content: space-around; align-items: center">
   <img width="20%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
-  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-  <img valign="top" width="11%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+  <img valign="super" width="11%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
 </div>
+
+[中文](./README.zh.md) | English
 
 > Ship it right and don't ship unexpected files.
 >
