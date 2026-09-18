@@ -15,7 +15,11 @@
 
 ## **shipwright** 的由来
 
-最近我的一个 npm 包差点把 node_modules 发布出去（我在 .gitignore 加了 `node_modules/` 几天后我想把占用包体积的 assets 文件从 tarball 删除，但这些文件不应该被 git 忽略，故新增了 .npmignore 将 `assets/` 规则写入其中，但是我没有写入 `node_modules/`，因为我满心以为 npm 打包时会将 .gitignore 和 .npmignore 二者规则 merge，然而事实上如果[二者同时存在 npm 只会使用 `.npmignore`](https://docs.npmjs.com/cli/v12/commands/npm-publish#:~:text=If%20both%20files%20exist%2C%20then%20the%20.gitignore%20is%20ignored%2C%20and%20only%20the%20.npmignore%20is%20used.)）；还有多年前我的一个被大量依赖的公司内部包发布少了 dist 目录下面很多文件，差点造成事故。
+最近我的一个 npm 包差点把 node_modules 发布出去：
+
+> 我在 .gitignore 加了 `node_modules/` 几天后我想把占用包体积的 assets 文件从 tarball 删除，但这些文件不应该被 git 忽略，故新增了 .npmignore 将 `assets/` 规则写入其中，但是我没有写入 `node_modules/`，因为我满心以为 npm 打包时会将 .gitignore 和 .npmignore 二者规则 merge，然而事实上如果[二者同时存在 npm 只会使用 `.npmignore`](https://docs.npmjs.com/cli/v12/commands/npm-publish#:~:text=If%20both%20files%20exist%2C%20then%20the%20.gitignore%20is%20ignored%2C%20and%20only%20the%20.npmignore%20is%20used.)）。
+
+还有多年前我的一个被大量依赖的公司内部包发布少了 dist 目录下面很多文件，差点造成事故。
 
 直到今年 Anthropic 的 Claude Code 源码泄露事件：因打包配置错误，将一个 57 MB 的 source map 文件（cli.js.map）意外打包进了公开发布的 npm 包中。
 
@@ -81,12 +85,11 @@ npx npm-shipwright --threshold-count 5 --threshold-size 10%
 检查包体积大小和检查数量一样重要。两种模式不同，每种失败模式互补尽量捕捉到对方遗漏的东西：
 
 - **A file count check 🧮** 能捕获 *"有多个文件意外丢失或新增"*，但如果有单个**大文件**偷偷溜入就无能为力了。
-- **A size check ⚖️** catches *"package got much bigger or much smaller"* — a source map slipped into the tarball, a bundled dependency ballooned. But it stays silent even when a large number of small files are missing or added mistakenly.
 - **A size check ⚖️** 能敏锐地捕捉到 *"包体积骤增或骤降"*，比如一个 source map 文件被不小心打包进去了，或引入了不合理的包体积突然膨胀。但如果有*大量小文件*被意外地丢失或新增，它就无能为力了。
 
 **两者结合** 覆盖彼此盲区。
 
-2026 年 3 月的 Claude Code 泄露事件，就是前车之鉴。**仅一个** 57 MB 的 source map 误入已发布的 npm 包里，就把整个专有代码库暴露了出去。而文件数量几乎没动：一个文件数量巨大的包里偷偷混进**一个**文件，太容易被忽视了。但**体积**会尖叫。一个突然增大几十兆的 tarball，是最高级别的警报。
+2026 年 3 月的 Claude Code 泄露事件，就是前车之鉴。**仅一个** 57 MB 的 source map 误入已发布的 npm 包里，就把整个闭源代码库都暴露了出去。而文件数量几乎没动：一个文件数量巨大的包里偷偷混进**一个**文件，太容易被忽视了。但**体积**会尖叫。一个突然增大几十兆的 tarball，是最高级别的警报。
 
 单靠任何一道检查，挡不住所有错误。体积检查（默认阈值：`10%`）看不见「大量小文件被误添加或删除」，数量检查（默认阈值：`5`）会错过「一个巨大文件被添加或删除的异常」。两道一起跑，才能捕获尽可能多的异常。
 
