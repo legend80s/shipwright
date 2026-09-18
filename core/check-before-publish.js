@@ -14,7 +14,7 @@ import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
 /** @typedef {NpmPackDryRunJSONItem['files'][0]} File */
 /** @typedef {`${string}/${string}`} Directory */
 
-const testing = false
+const testing = true
 const fileCountOverlimit = false
 const packageSizeOverlimit = true
 
@@ -80,13 +80,10 @@ export async function check(values, logger) {
     const msg1 =
       `To publish ` +
       red(`v${version}`) +
-      ` file count is ${red(totalFiles)}, but previous published ` +
+      ` file count ${red(totalFiles)}, but previous published ` +
       green(`v${prevVersion}`) +
-      ` file count is ${green(prevFileCount)}.`
+      ` file count ${green(prevFileCount)}. Count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
     logger.error(colors.RESET + msg1 + colors.RESET)
-
-    const msg2 = `File count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${threshold.fileCount}).`
-    logger.error(colors.RESET + msg2 + colors.RESET)
 
     printFilesStats(logger, files)
 
@@ -94,8 +91,8 @@ export async function check(values, logger) {
   }
 
   async function showConfirm() {
-    const msg3 = `This usually means an error — too many files missing or too many extra files added. Please review the changes and make sure it's intentional.`
-    logger.error(msg3)
+    // const msg3 = `This usually means an error — too many files missing or too many extra files added. Please review the changes and make sure it's intentional.`
+    // logger.error(msg3)
 
     const isInteractive = process.stdin.isTTY
 
@@ -186,7 +183,7 @@ async function fetchDiffCore(pkgName, logger) {
     })
   }
 
-  logger.info(`Previous published v${prevVersion}:`, { prevFileCount, prevUnpackedSize })
+  logger.debug(`Previous published v${prevVersion}:`, { prevFileCount, prevUnpackedSize })
 
   const {
     name,
@@ -210,7 +207,7 @@ async function fetchDiffCore(pkgName, logger) {
     (((unpackedSize - prevUnpackedSize) / prevUnpackedSize) * 100).toFixed(0),
   )
 
-  logger.info(
+  logger.debug(
     `To publish file count:`,
     totalFiles,
     "unpacked size:",
