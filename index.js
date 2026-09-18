@@ -9,9 +9,9 @@ import { check } from "./core/check-before-publish.js"
 /** @typedef {`${string}/${string}`} Directory */
 /** @typedef {typeof values} CliValues */
 
-const DEFAULT_THRESHOLD = {
-  DIFF_FILE_COUNT: 6,
-  DIFF_PACKAGE_SIZE_IN_PERCENT: 10,
+const DEFAULT_DIFF_THRESHOLD = {
+  FILE_COUNT: 5,
+  PACKAGE_SIZE_IN_PERCENT: 10,
 }
 
 /**
@@ -47,7 +47,7 @@ const options = /** @type {const} */ ({
   },
   "threshold-count": {
     type: "string",
-    default: String(DEFAULT_THRESHOLD.DIFF_FILE_COUNT),
+    default: String(DEFAULT_DIFF_THRESHOLD.FILE_COUNT),
     short: "c",
     // @ts-expect-error
     description:
@@ -55,7 +55,7 @@ const options = /** @type {const} */ ({
   },
   "threshold-size": {
     type: "string",
-    default: String(DEFAULT_THRESHOLD.DIFF_PACKAGE_SIZE_IN_PERCENT),
+    default: String(DEFAULT_DIFF_THRESHOLD.PACKAGE_SIZE_IN_PERCENT),
     short: "s",
     // @ts-expect-error
     description:
