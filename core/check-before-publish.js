@@ -44,8 +44,8 @@ export async function check(values, logger) {
   }
 
   const threshold = {
-    fileCount: Number(values["threshold-file-count"]),
-    unpackedSize: Number(values["threshold-package-size"]),
+    fileCount: Number(values["threshold-count"]),
+    unpackedSize: Number(values["threshold-size"]),
   }
 
   const isFileCountOverThreshold = Math.abs(diff.fileCount) >= threshold.fileCount

@@ -1,8 +1,9 @@
 # shipwright
 
 <div align="center" style="display: flex; justify-content: space-around; align-items: center">
-  <img width="40%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
-  <img width="25%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
+  <img width="20%" alt="A captain at a ship's wheel" src="https://koboyo.com/icons/svg/captain-ship-s-wheel.svg" />
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+  <img valign="top" width="12%" alt="A container ship of boxes" src="https://koboyo.com/icons/svg/cartoon-container-ship-boxes.svg" />
 </div>
 
 > Ship it right and don't ship unexpected files.
@@ -11,20 +12,18 @@
 
 ## Why "shipwright"?
 
+Shipwright: every release should ship right.
+
 A **shipwright** is a craftsman who builds and repairs ships. Before a vessel
 leaves the harbor, the shipwright walks the deck and checks the manifest — every
 plank, every crate, every crew member accounted for. Nothing sails that shouldn't,
 nothing stays ashore that should have gone.
 
-That is exactly what this tool does before `npm publish`.
+`shipwright` is the one who makes sure what you ship is what you meant to ship.
 
-The name also carries a quiet double meaning: **ship** + **wright**. In the npm
-world, "ship" is what you do when you publish. A wright is a maker — someone who
-builds carefully and checks their work. `shipwright` is the one who makes sure
-what you ship is what you meant to ship.
+“Don't let the boat leave the dock until you've counted what's on it and weighed it.”
 
-It is a small nod to the oldest kind of release engineering: don't let the boat
-leave the dock until you've counted what's on it — and weighed it.
+That is exactly what this tool does before `npm publish`: **counting** files and **weighing** size.
 
 ## What it does
 
@@ -64,20 +63,42 @@ check alone misses the case where a huge file is added while an equally huge fil
 is removed. Run both, and the tarball has to pass two independent gates before
 it ships.
 
-## Install
-
-```sh
-npm install -g shipwright
-```
-
 ## Usage
 
+### Usage #1: Manually check before every publish
+
 ```sh
-shipwright --threshold-count 5 --threshold-size 10%
+npx npm-shipwright
 ```
 
-Exits `0` if both deviations are within their thresholds, `1` otherwise.
+> Or with customized threshold values:
+
+```sh
+npx npm-shipwright --threshold-count 5 --threshold-size 10%
+```
+
+Exits `success` if both deviations are within their thresholds, `error` otherwise.
+
+### Usage #1: Automatically check on every publish
+
+Add the following to your `package.json`:
+
+```json
+"scripts": {
+  "prepublishOnly": "npx npm-shipwright"
+}
+```
+
+Or use it like in the `package.json` example [here](https://github.com/legend80s/my-npm-dashboard/blob/main/src/package.json#L13).
+
+### Usage #3: As a linter
+
+> TODO: not implemented yet.
 
 ## Philosophy
 
 Ship intentionally. Count before you publish. Weigh before you sail.
+
+## TODO
+
+- [ ] Add linter support. Maybe name as `eslint-plugin-publish`.

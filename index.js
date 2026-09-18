@@ -45,7 +45,7 @@ const options = /** @type {const} */ ({
     description: "the name of the package",
     default: "",
   },
-  "threshold-file-count": {
+  "threshold-count": {
     type: "string",
     default: String(DEFAULT_THRESHOLD.DIFF_FILE_COUNT),
     short: "c",
@@ -53,7 +53,7 @@ const options = /** @type {const} */ ({
     description:
       "File count threshold. Publish aborts if the count diff from baseline exceeds this value.",
   },
-  "threshold-package-size": {
+  "threshold-size": {
     type: "string",
     default: String(DEFAULT_THRESHOLD.DIFF_PACKAGE_SIZE_IN_PERCENT),
     short: "s",
@@ -124,7 +124,7 @@ function showHelp() {
   console.log(
     styleText(
       "greenBright",
-      `  "check-files-to-publish": "shipwright --name=${name} --threshold-file-count=6 --threshold-package-size=10 --throw --silent"`,
+      `  "check-files-to-publish": "shipwright --name=${name} --threshold-count=6 --threshold-size=10 --throw --silent"`,
     ),
   )
   console.log()
