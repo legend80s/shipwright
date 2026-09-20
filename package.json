@@ -1,6 +1,6 @@
 {
   "name": "npm-shipwright",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "🚢 Shipwright: Check file count and package size against the last published version as baseline before you npm publish.",
   "type": "module",
   "main": "index.js",
