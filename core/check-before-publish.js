@@ -62,27 +62,20 @@ export async function check(values, logger) {
   }
 
   function handlePackageSizeThresholdExceeded() {
-    const msg1 =
-      `To publish ` +
-      red(`v${version}`) +
-      ` package size is ${red(unpackedSize)}, but previous published ` +
+    const msg =
+      `To publish package size: ${red(unpackedSize)}, but previous published ` +
       green(`v${prevVersion}`) +
-      ` size is ${green(prevUnpackedSize)}.`
-    logger.error(colors.RESET + msg1 + colors.RESET)
-
-    const msg2 = `Package size diff ${diff.unpackedSize}% ${red("❯=")} threshold ${threshold.unpackedSize}%.`
-    logger.error(colors.RESET + msg2 + colors.RESET)
+      ` size: ${green(prevUnpackedSize)}. Package size diff ${diff.unpackedSize}% ${red("❯=")} threshold ${threshold.unpackedSize}%.`
+    logger.error(colors.RESET + msg + colors.RESET)
 
     showConfirm()
   }
 
   function handleFileCountThresholdExceeded() {
     const msg1 =
-      `To publish ` +
-      red(`v${version}`) +
-      ` file count ${red(totalFiles)}, but previous published ` +
+      `To publish file count: ${red(totalFiles)}, but previous published ` +
       green(`v${prevVersion}`) +
-      ` file count ${green(prevFileCount)}. Count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
+      ` file count: ${green(prevFileCount)}. Count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
     logger.error(colors.RESET + msg1 + colors.RESET)
 
     printFilesStats(logger, files)
