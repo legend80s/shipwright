@@ -45,7 +45,7 @@ Add the following to your `package.json`:
 
 Or use it like the `package.json` [example here](https://github.com/legend80s/my-npm-dashboard/blob/main/src/package.json#L13).
 
-## **Shipwright**: every release should ship right
+## **Shipwright**: Every Release Should Ship Right
 
 Nothing sails that shouldn't, nothing stays ashore that should have gone.
 
