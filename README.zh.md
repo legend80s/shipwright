@@ -51,6 +51,10 @@ npx npm-shipwright --threshold-count 5 --threshold-size 10%
 
 ### 使用方式 #2: Automatically Check Before Every Publish
 
+```sh
+npm install -D npm-shipwright
+```
+
 在 `package.json` 中添加以下内容：
 
 ```json

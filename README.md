@@ -31,6 +31,10 @@ Exits `success` if both deviations are within their thresholds, `error` otherwis
 
 ### Usage #2: Automatically Check Before Every Publish
 
+```sh
+npm install -D npm-shipwright
+```
+
 Add the following to your `package.json`:
 
 ```json
