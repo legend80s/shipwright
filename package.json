@@ -17,7 +17,7 @@
     "info1": "echo %npm_package_name%",
     "info2": "echo $npm_package_name",
     "check-files-to-publish": "node ./index.js --name=%npm_package_name% --threshold-count=5 --throw --no-silent",
-    "test": "echo TODO",
+    "test": "node --test",
     "pub:patch": "npm version patch",
     "pub:minor": "npm version minor",
     "pub:major": "npm version major",
