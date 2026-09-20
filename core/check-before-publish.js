@@ -6,12 +6,13 @@ import { execSync } from "node:child_process"
 import readline from "node:readline"
 import { styleText } from "node:util"
 import { colors, cyan, green, red } from "../utils/colors.js"
-import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
+import { fetchJSON, getSign, safeAsyncCall } from "../utils/light-lodash.js"
+import { logHeader } from "../utils/markdown.js"
 import { flattenTree, groupAndSortByFileCount, printDiff } from "./diff.js"
 
 /** @import { NpmPackDryRunJSONItem, NpmPackDryRunJSON, Logger, NpmPkgResp, NpmxPkgFilesResp, DryRunFiles } from './type.js' */
+/** @import { int } from '../utils/type.js' */
 
-/** @typedef {number} int */
 /** @typedef {NpmPackDryRunJSONItem['files'][0]} DryRunFileInfo */
 
 const testing = false
@@ -57,7 +58,7 @@ export async function check(values, logger) {
     handlePackageSizeThresholdExceeded(prevVersion)
   } else {
     logger.success(
-      `✅ File count check success: diff (${Math.abs(diff.fileCount)}) < threshold (${threshold.fileCount}). Ready to publish!`,
+      `✅ Check success: count diff (|${getSign(diff.fileCount)}${diff.fileCount}|) < threshold (${threshold.fileCount}) && size diff (|${getSign(diff.unpackedSize)}${diff.unpackedSize}%|) < threshold (${threshold.unpackedSize}%). Ready to publish!`,
     )
   }
 
@@ -77,7 +78,7 @@ export async function check(values, logger) {
     const msg1 =
       `To publish file count: ${red(totalFiles)}, but previous published ` +
       green(`v${prevVersion}`) +
-      ` file count: ${green(prevFileCount)}. Count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
+      ` file count: ${green(prevFileCount)}. Count diff (|${totalFiles} - ${prevFileCount}| = |${diff.fileCount}|) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
     logger.error(colors.RESET + msg1 + colors.RESET)
 
     handleThresholdExceeded(prevVersion)
@@ -355,7 +356,7 @@ async function fetchNpmxPkgFiles(pkgName, version, logger) {
     return fetchNpmxPkgFiles.promise
   }
   const api = `https://npmx.dev/api/registry/files/${pkgName}/v/${version}`
-  logger.info(`Try fetch pkg fils count by npmx (${api})`)
+  logger.debug(`Try fetch pkg fils count by npmx (${api})`)
   // @ts-expect-error
   fetchNpmxPkgFiles.promise = safeAsyncCall(
     () => /** @type {Promise<NpmxPkgFilesResp>} */ (fetchJSON(api)),
@@ -370,8 +371,8 @@ async function fetchNpmxPkgFiles(pkgName, version, logger) {
   const json = await fetchNpmxPkgFiles.promise
 
   if (!json) {
-    logger.error(`❌ pkg files fetch failed by ${api}`)
-    throw new Error(`❌ pkg files fetch failed by ${api} and ${api}`)
+    const msg = `❌ pkg files fetch failed by npmx (${api})`
+    throw new Error(msg)
   }
 
   return json
@@ -436,14 +437,15 @@ function printFilesStats(logger, files) {
   const sorted = groupAndSortByFileCount(files)
 
   console.log()
-  logger.info(
-    "## Files stats (by parsing",
+  logHeader(
+    "h2",
+    "Files stats (by parsing",
     green(`\`${PACK_DRY_RUN_CMD} --json\``),
     "and grouped):",
   )
   sorted.forEach(([key, files], index) => {
-    // logger.info(index + 1, `\b.`, key, ":", files.length)
-    logger.info(`${cyan(index + 1)}.`, key, "\b:", files.length)
+    // console.info(index + 1, `\b.`, key, ":", files.length)
+    console.info(`${cyan(index + 1)}.`, key, "\b:", files.length)
   })
   // console.log(Object.fromEntries(sorted.map(([key, files]) => [key, files.length])))
   console.log()

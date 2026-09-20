@@ -1,6 +1,3 @@
-// primitive types
-export type int = number
-
 // cli types
 // export type CliValues = {
 //   verbose: boolean
@@ -9,6 +6,8 @@ export type int = number
 //   throw: boolean
 //   name: string
 // }
+
+import type { int } from "../utils/type.js"
 
 export type Logger = {
   debug: (...args: unknown[]) => void

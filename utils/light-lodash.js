@@ -47,3 +47,11 @@ export async function safeAsyncCall(asyncFunc, { onError = () => {} } = {}) {
     return null
   }
 }
+
+/**
+ * @param {import('./type.js').int} value
+ * @returns {'' | '+'}
+ */
+export function getSign(value) {
+  return value > 0 ? "+" : ""
+}

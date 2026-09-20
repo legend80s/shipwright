@@ -3,7 +3,8 @@ import { cyan, gray, green, red, yellow } from "../utils/colors.js"
 import { logHeader } from "../utils/markdown.js"
 
 /** @typedef {`${string}/${string}`} Directory */
-/** @import { int, DryRunFiles, NpmxPkgFilesResp } from './type.js' */
+/** @import { DryRunFiles, NpmxPkgFilesResp } from './type.js' */
+/** @import { int } from '../utils/type.js' */
 
 const PACK_DRY_RUN_CMD = `npm pack --dry-run`
 
