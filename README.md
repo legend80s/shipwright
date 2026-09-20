@@ -18,13 +18,13 @@
 ### Usage #1: Manually Check Before Every Publish
 
 ```sh
-npx npm-shipwright
+npx npm-shipwright --silent
 ```
 
 > Or with customized threshold values:
 
 ```sh
-npx npm-shipwright --threshold-count 5 --threshold-size 10
+npx npm-shipwright --threshold-count 5 --threshold-size 10 --silent
 ```
 
 Exits `success` if both deviations are within their thresholds, `error` otherwise.
@@ -39,7 +39,7 @@ Add the following to your `package.json`:
 
 ```json
 "scripts": {
-  "prepublishOnly": "npx npm-shipwright"
+  "prepublishOnly": "shipwright --silent"
 }
 ```
 
@@ -103,4 +103,4 @@ People slip; tools hold. Telling people to "Be careful when you ship" is futile 
 ## TODO
 
 - [x] ~~Works as a linter. Maybe name as `eslint-plugin-publish`.~~ It is not fit for a linter because the check takes seconds. It will run `npm pack --dry-run --json` and fetch the baseline from npm registry. So too heavy for linter.
-- [ ] Print files when size over threshold.
+- [x] Print files when size over threshold.

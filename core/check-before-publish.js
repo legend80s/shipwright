@@ -194,8 +194,6 @@ async function fetchDiffCore(pkgName, logger) {
     })
   }
 
-  logger.debug(`Previous published v${prevVersion}:`, { prevFileCount, prevUnpackedSize })
-
   const { name, entryCount: totalFiles, version, files, unpackedSize } = fetchToPublishInfo(pkgName)
 
   const msgWrongDir = `Check if \`${PACK_DRY_RUN_CMD}\` ran in the wrong directory.`
@@ -210,6 +208,14 @@ async function fetchDiffCore(pkgName, logger) {
   // diffUnpackedSizeInPercent can be negative
   const diffUnpackedSizeInPercent = Number(
     (((unpackedSize - prevUnpackedSize) / prevUnpackedSize) * 100).toFixed(0),
+  )
+
+  logger.info(
+    `Previous published v${prevVersion}:`,
+    { prevFileCount, prevUnpackedSize },
+    "VS",
+    `To publish:`,
+    { totalFiles, unpackedSize },
   )
 
   logger.debug(

@@ -44,7 +44,7 @@ npx npm-shipwright
 > 或者使用自定义阈值：
 
 ```sh
-npx npm-shipwright --threshold-count 5 --threshold-size 10
+npx npm-shipwright --threshold-count 5 --threshold-size 10 --silent
 ```
 
 如果两个偏差都在阈值范围内，则检测通过 `success`，否则 `error`。
@@ -59,7 +59,7 @@ npm install -D npm-shipwright
 
 ```json
 "scripts": {
-  "prepublishOnly": "npx npm-shipwright"
+  "prepublishOnly": "shipwright --silent"
 }
 ```
 
