@@ -1,0 +1,840 @@
+{
+  "package": "npm-calf",
+  "version": "1.4.0",
+  "tree": [
+    {
+      "name": "assets",
+      "path": "assets",
+      "type": "directory",
+      "size": 11269,
+      "children": [
+        {
+          "name": "calf-elephant.svg",
+          "path": "assets/calf-elephant.svg",
+          "type": "file",
+          "hash": "866JF12nYMetzAxMb/2E8lbqggrZ37bW/LBD4xgoMKQ=",
+          "size": 7669
+        },
+        {
+          "name": "javascript.svg",
+          "path": "assets/javascript.svg",
+          "type": "file",
+          "hash": "jaxTeZEEIUwwdpqkTCWhazyMhvfGxuRvsZluY6tdgo4=",
+          "size": 995
+        },
+        {
+          "name": "tauri.svg",
+          "path": "assets/tauri.svg",
+          "type": "file",
+          "hash": "PzJpipy2T00G1N+J7LkDQYNHWJoX0pcgin9odBqLVnI=",
+          "size": 2605
+        }
+      ]
+    },
+    {
+      "name": "backend",
+      "path": "backend",
+      "type": "directory",
+      "size": 47801,
+      "children": [
+        {
+          "name": "dev-server",
+          "path": "backend/dev-server",
+          "type": "directory",
+          "size": 14113,
+          "children": [
+            {
+              "name": "middlewares",
+              "path": "backend/dev-server/middlewares",
+              "type": "directory",
+              "size": 6421,
+              "children": [
+                {
+                  "name": "error.js",
+                  "path": "backend/dev-server/middlewares/error.js",
+                  "type": "file",
+                  "hash": "PkhPaCnK1tQrX013tHm9Bb5z9X4RaXJoX4Dvau5nNKw=",
+                  "size": 659
+                },
+                {
+                  "name": "fancy-logger.js",
+                  "path": "backend/dev-server/middlewares/fancy-logger.js",
+                  "type": "file",
+                  "hash": "FIVCXnuJjeAuz9QtZ4pqvCSCK+Kt0ADrh4n5ezMrrxk=",
+                  "size": 3017
+                },
+                {
+                  "name": "serve-mutiple-static-folders.js",
+                  "path": "backend/dev-server/middlewares/serve-mutiple-static-folders.js",
+                  "type": "file",
+                  "hash": "4ostO5swtfGzskrtUiqX4V01RoGwlrOG568RHTeh7uE=",
+                  "size": 2745
+                }
+              ]
+            },
+            {
+              "name": "routes",
+              "path": "backend/dev-server/routes",
+              "type": "directory",
+              "size": 5163,
+              "children": [
+                {
+                  "name": "_utils.js",
+                  "path": "backend/dev-server/routes/_utils.js",
+                  "type": "file",
+                  "hash": "dBqyIXnmgWhR1dbnFN/bR3ZSO4wj8ga5A8uc4e3mRXA=",
+                  "size": 326
+                },
+                {
+                  "name": "github.js",
+                  "path": "backend/dev-server/routes/github.js",
+                  "type": "file",
+                  "hash": "nOqYgPN26zr1IwnVv3vFIhHMJqlcetlHPui8AFkvNsw=",
+                  "size": 3014
+                },
+                {
+                  "name": "npm-api.js",
+                  "path": "backend/dev-server/routes/npm-api.js",
+                  "type": "file",
+                  "hash": "QQT0wzqre00VO8CNac3IlJggXd1nbY+LPit8wC5mPH8=",
+                  "size": 734
+                },
+                {
+                  "name": "npm-registry.js",
+                  "path": "backend/dev-server/routes/npm-registry.js",
+                  "type": "file",
+                  "hash": "4CcO9AqLZMFw4eV0oEeEfjFh8dEoX9a/UUBhRVCBdZg=",
+                  "size": 1089
+                }
+              ]
+            },
+            {
+              "name": "index.js",
+              "path": "backend/dev-server/index.js",
+              "type": "file",
+              "hash": "4WA3mt3Vjs38b5MJA+GQciN0ODiiFb5CK5JS3dPiqfY=",
+              "size": 2529
+            }
+          ]
+        },
+        {
+          "name": "utils",
+          "path": "backend/utils",
+          "type": "directory",
+          "size": 25276,
+          "children": [
+            {
+              "name": "logger",
+              "path": "backend/utils/logger",
+              "type": "directory",
+              "size": 23996,
+              "children": [
+                {
+                  "name": "assets",
+                  "path": "backend/utils/logger/assets",
+                  "type": "directory",
+                  "size": 349,
+                  "children": [
+                    {
+                      "name": "languages.svg",
+                      "path": "backend/utils/logger/assets/languages.svg",
+                      "type": "file",
+                      "hash": "0pL/2QcjQiikaSset8GkDB+xzSaK/rc7dakbqlTObV4=",
+                      "size": 349
+                    }
+                  ]
+                },
+                {
+                  "name": "index.js",
+                  "path": "backend/utils/logger/index.js",
+                  "type": "file",
+                  "hash": "2fgE1dHSomqqNjQrzUKY7uJPRtE1W4VBD5P+ec9W2bA=",
+                  "size": 7010
+                },
+                {
+                  "name": "index.test.js",
+                  "path": "backend/utils/logger/index.test.js",
+                  "type": "file",
+                  "hash": "dOBNQ+3czhxz8+6uuYUTfDOw58X2v+gSPEFjTqNoBV0=",
+                  "size": 3027
+                },
+                {
+                  "name": "LICENSE",
+                  "path": "backend/utils/logger/LICENSE",
+                  "type": "file",
+                  "hash": "+RPNvw2YxGaTtKDpq/yWyWIU5jC44THPVG3lC5qktqs=",
+                  "size": 1066
+                },
+                {
+                  "name": "logger.type.ts",
+                  "path": "backend/utils/logger/logger.type.ts",
+                  "type": "file",
+                  "hash": "14mH7Ug5DLQ5+x6o05m/5riHpW3EO9u3NfJekeUw3jA=",
+                  "size": 859
+                },
+                {
+                  "name": "package.json",
+                  "path": "backend/utils/logger/package.json",
+                  "type": "file",
+                  "hash": "+N/0fddWkYu/ZTBbXOvju8gLsrpehXbSg8B5U/MDHZA=",
+                  "size": 1301
+                },
+                {
+                  "name": "README-more-more.md",
+                  "path": "backend/utils/logger/README-more-more.md",
+                  "type": "file",
+                  "hash": "xsexwYU69odG+FXyzyHRz9X3bvbK1cC17/TEOnDC9zU=",
+                  "size": 6174
+                },
+                {
+                  "name": "README-more.md",
+                  "path": "backend/utils/logger/README-more.md",
+                  "type": "file",
+                  "hash": "CacjpcwfI8AIV9zOy2zIAt+EcnfNFANbCb7lVC2CKKM=",
+                  "size": 1488
+                },
+                {
+                  "name": "README.md",
+                  "path": "backend/utils/logger/README.md",
+                  "type": "file",
+                  "hash": "OFqwmixcnvGoGDIMW4X++SUa4wvXhoY+ejUHdS9YRrw=",
+                  "size": 2722
+                }
+              ]
+            },
+            {
+              "name": "platform.js",
+              "path": "backend/utils/platform.js",
+              "type": "file",
+              "hash": "jpScqO1wbPmonbiTCQ+WCEnGyvMD55mW12GilqdqzM4=",
+              "size": 1280
+            }
+          ]
+        },
+        {
+          "name": "index.js",
+          "path": "backend/index.js",
+          "type": "file",
+          "hash": "Ww17tiMpC1EdcZ5xlhZt29tRXZ6CKAJrlrdXlZfBarE=",
+          "size": 7020
+        },
+        {
+          "name": "package.json",
+          "path": "backend/package.json",
+          "type": "file",
+          "hash": "awMab4em1rHICdsi7NHQ9Q3uMPJD73KEGaO0R5E0kh8=",
+          "size": 263
+        },
+        {
+          "name": "pnpm-lock.yaml",
+          "path": "backend/pnpm-lock.yaml",
+          "type": "file",
+          "hash": "eovqewGUlg8QSNCQT1VRt1jc8axJg6lD0bLSzrjoe+Q=",
+          "size": 807
+        },
+        {
+          "name": "README.md",
+          "path": "backend/README.md",
+          "type": "file",
+          "hash": "oTXTJjuCEAEcOs+n9CPo5Uz8m921wY1GmO28xWgT+Ts=",
+          "size": 322
+        }
+      ]
+    },
+    {
+      "name": "bin",
+      "path": "bin",
+      "type": "directory",
+      "size": 2316,
+      "children": [
+        {
+          "name": "index.js",
+          "path": "bin/index.js",
+          "type": "file",
+          "hash": "G+wKG2PRlNpPE+8swH7vpV1tM/Zk/3IQeqpioz021VA=",
+          "size": 2316
+        }
+      ]
+    },
+    {
+      "name": "frontend",
+      "path": "frontend",
+      "type": "directory",
+      "size": 858201,
+      "children": [
+        {
+          "name": "assets",
+          "path": "frontend/assets",
+          "type": "directory",
+          "size": 113856,
+          "children": [
+            {
+              "name": "fonts",
+              "path": "frontend/assets/fonts",
+              "type": "directory",
+              "size": 113856,
+              "children": [
+                {
+                  "name": "huiwen-mincho-subset.woff2",
+                  "path": "frontend/assets/fonts/huiwen-mincho-subset.woff2",
+                  "type": "file",
+                  "hash": "hVOkzUzPlha46LCc074cxujVufzitVZDsvzwa6CYqtw=",
+                  "size": 113856
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "constants",
+          "path": "frontend/constants",
+          "type": "directory",
+          "size": 42667,
+          "children": [
+            {
+              "name": "cache.js",
+              "path": "frontend/constants/cache.js",
+              "type": "file",
+              "hash": "TaByWc8j3pZsUx+tu4+hqTDl71q9ljX55wM7YbPkZBM=",
+              "size": 568
+            },
+            {
+              "name": "icons.js",
+              "path": "frontend/constants/icons.js",
+              "type": "file",
+              "hash": "VikhB+KB+Hht9sZjlNhUUk6Iawf8KE/GVBAK73E8IqI=",
+              "size": 41878
+            },
+            {
+              "name": "icons.type.ts",
+              "path": "frontend/constants/icons.type.ts",
+              "type": "file",
+              "hash": "UFPTSHKTbaOwLpcsOW2pSWQj9Nd6/X7UKI2CaOU9l/o=",
+              "size": 221
+            }
+          ]
+        },
+        {
+          "name": "utils",
+          "path": "frontend/utils",
+          "type": "directory",
+          "size": 46365,
+          "children": [
+            {
+              "name": "api-github.type.ts",
+              "path": "frontend/utils/api-github.type.ts",
+              "type": "file",
+              "hash": "byRtYv80yAWw21y9TcrknanItYLOx5qrDer77vLUJPA=",
+              "size": 3808
+            },
+            {
+              "name": "api.js",
+              "path": "frontend/utils/api.js",
+              "type": "file",
+              "hash": "q7kp1/kQCuqqmETW1/YQCWWUzH/gTi75d8GLUEjiZyA=",
+              "size": 10859
+            },
+            {
+              "name": "base.type.ts",
+              "path": "frontend/utils/base.type.ts",
+              "type": "file",
+              "hash": "bSeavNT6aXwCHvGTo8Typ7EsOBjXds8h4f3jTo8KXe4=",
+              "size": 526
+            },
+            {
+              "name": "cache.js",
+              "path": "frontend/utils/cache.js",
+              "type": "file",
+              "hash": "84+YfDVYiTPssxo2WaLBe88RP4xWwJZtBqK/52+0rho=",
+              "size": 3467
+            },
+            {
+              "name": "compile-locales.js",
+              "path": "frontend/utils/compile-locales.js",
+              "type": "file",
+              "hash": "/DxEF3VolPYaXqRMIff5BC/D0rAy8ABXkC6EBeduokI=",
+              "size": 2499
+            },
+            {
+              "name": "data-loader.js",
+              "path": "frontend/utils/data-loader.js",
+              "type": "file",
+              "hash": "qsObRS0kQIIANZERfEYF3xaAH8GVjJ8Vkc7nsPvQbLg=",
+              "size": 6995
+            },
+            {
+              "name": "light-jquery.js",
+              "path": "frontend/utils/light-jquery.js",
+              "type": "file",
+              "hash": "C7EUl/7KTT/kX7ukc6HyQd9pPzKeJPZQhe0VQ8iMlmU=",
+              "size": 5018
+            },
+            {
+              "name": "light-lodash.js",
+              "path": "frontend/utils/light-lodash.js",
+              "type": "file",
+              "hash": "ZzGvXyN+L2g8m7QkRApQAfa6HyCZKV2qaZYCVshmRvY=",
+              "size": 957
+            },
+            {
+              "name": "lit.js",
+              "path": "frontend/utils/lit.js",
+              "type": "file",
+              "hash": "hEjKgvthqOoMu0zNytvb+kPDe4YxYe+2I4qC3jr+Czo=",
+              "size": 502
+            },
+            {
+              "name": "local-storage.js",
+              "path": "frontend/utils/local-storage.js",
+              "type": "file",
+              "hash": "zY4wlT003mDiCRnwOyASO1QzkP3GqHCpbqQkRFBYaBA=",
+              "size": 1022
+            },
+            {
+              "name": "locales.js",
+              "path": "frontend/utils/locales.js",
+              "type": "file",
+              "hash": "StM2M2TtmXg9mE4VyLH+P3fRpPHb5UxiAMw62TaAv1g=",
+              "size": 5012
+            },
+            {
+              "name": "npmjs.type.ts",
+              "path": "frontend/utils/npmjs.type.ts",
+              "type": "file",
+              "hash": "tyCAQ48j48T6FCsZD9fRH9hdDyiL800v7QhSbI0xDvY=",
+              "size": 3757
+            },
+            {
+              "name": "sync-cache.js",
+              "path": "frontend/utils/sync-cache.js",
+              "type": "file",
+              "hash": "i+D0kLW/w2YLit1J+8vALqPXxOyJkCZrc/x4z0eX6/4=",
+              "size": 1943
+            }
+          ]
+        },
+        {
+          "name": "web-components",
+          "path": "frontend/web-components",
+          "type": "directory",
+          "size": 536605,
+          "children": [
+            {
+              "name": "badge-dependencies",
+              "path": "frontend/web-components/badge-dependencies",
+              "type": "directory",
+              "size": 3744,
+              "children": [
+                {
+                  "name": "index.html",
+                  "path": "frontend/web-components/badge-dependencies/index.html",
+                  "type": "file",
+                  "hash": "ReLWgjwOOSD8/IdV5c3+V8+RXSR43wPyW7Y2u1nNDfA=",
+                  "size": 140
+                },
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/badge-dependencies/index.js",
+                  "type": "file",
+                  "hash": "jiJVs/UkHVS9SzvQHiz/yX3yWa+eK4Ah4KhPUtKpb3U=",
+                  "size": 3604
+                }
+              ]
+            },
+            {
+              "name": "copyright-footer",
+              "path": "frontend/web-components/copyright-footer",
+              "type": "directory",
+              "size": 1322,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/copyright-footer/index.js",
+                  "type": "file",
+                  "hash": "dLasR2Aobtq/LH7bc6aUKtKXECOTGrHz41g93cvVeks=",
+                  "size": 1322
+                }
+              ]
+            },
+            {
+              "name": "fancy-border",
+              "path": "frontend/web-components/fancy-border",
+              "type": "directory",
+              "size": 569,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/fancy-border/index.js",
+                  "type": "file",
+                  "hash": "JkX3kll8Vfx/eAY70XPIkrOty0fRYk8mkvzGS6wtpeI=",
+                  "size": 569
+                }
+              ]
+            },
+            {
+              "name": "icon-awesome",
+              "path": "frontend/web-components/icon-awesome",
+              "type": "directory",
+              "size": 1253,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/icon-awesome/index.js",
+                  "type": "file",
+                  "hash": "9z+DoKOzMaUkzsgndmBaSAGCeDxw2xAKvCYzeS2JDJM=",
+                  "size": 1253
+                }
+              ]
+            },
+            {
+              "name": "icon-bulb-on-a-string-at-a-slight-angle",
+              "path": "frontend/web-components/icon-bulb-on-a-string-at-a-slight-angle",
+              "type": "directory",
+              "size": 2797,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/icon-bulb-on-a-string-at-a-slight-angle/index.js",
+                  "type": "file",
+                  "hash": "4vMZ7pHRRLdgzyq9EkSao9crOFIldsbJnhQHeN/syKQ=",
+                  "size": 2797
+                }
+              ]
+            },
+            {
+              "name": "icon-package-search",
+              "path": "frontend/web-components/icon-package-search",
+              "type": "directory",
+              "size": 1210,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/icon-package-search/index.js",
+                  "type": "file",
+                  "hash": "JzgmXqgu9pHFlBTFUiQFT/aYJrD8XjF2y3c25QS4YZM=",
+                  "size": 1210
+                }
+              ]
+            },
+            {
+              "name": "minchao-branch-of-blossoms",
+              "path": "frontend/web-components/minchao-branch-of-blossoms",
+              "type": "directory",
+              "size": 493489,
+              "children": [
+                {
+                  "name": "flower-shadow.webp",
+                  "path": "frontend/web-components/minchao-branch-of-blossoms/flower-shadow.webp",
+                  "type": "file",
+                  "hash": "30DMXtK2tOZudjHBMWr6RJQlH29Z31/en6tAecaxib4=",
+                  "size": 296748
+                },
+                {
+                  "name": "index.css",
+                  "path": "frontend/web-components/minchao-branch-of-blossoms/index.css",
+                  "type": "file",
+                  "hash": "0RP69ugSu8BY3xNC7HP+xDE70tD/v2xisq+E/CRM7Zk=",
+                  "size": 3175
+                },
+                {
+                  "name": "paper-waves.png",
+                  "path": "frontend/web-components/minchao-branch-of-blossoms/paper-waves.png",
+                  "type": "file",
+                  "hash": "gd5y/q2l+USrnaynfui/dOD+BuECZ0XLpltrXPYSdAo=",
+                  "size": 193566
+                }
+              ]
+            },
+            {
+              "name": "result-error",
+              "path": "frontend/web-components/result-error",
+              "type": "directory",
+              "size": 3119,
+              "children": [
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/result-error/index.js",
+                  "type": "file",
+                  "hash": "QoXNLpF5Kba5WoNe907vjJ8JtN3jdWb22lG1i2ugQls=",
+                  "size": 3119
+                }
+              ]
+            },
+            {
+              "name": "searching-spinner",
+              "path": "frontend/web-components/searching-spinner",
+              "type": "directory",
+              "size": 6135,
+              "children": [
+                {
+                  "name": "spinner.js",
+                  "path": "frontend/web-components/searching-spinner/spinner.js",
+                  "type": "file",
+                  "hash": "q6M0Oh4DeB32DBRyObsoiHhvOCvdGOqPRrEMG/mlWfM=",
+                  "size": 6135
+                }
+              ]
+            },
+            {
+              "name": "settings-dialog",
+              "path": "frontend/web-components/settings-dialog",
+              "type": "directory",
+              "size": 10937,
+              "children": [
+                {
+                  "name": "index.html",
+                  "path": "frontend/web-components/settings-dialog/index.html",
+                  "type": "file",
+                  "hash": "BRtwH7tJHiMkxUgPy9lWxWyo2NXxX1SOGJw+Xl1hrR0=",
+                  "size": 6198
+                },
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/settings-dialog/index.js",
+                  "type": "file",
+                  "hash": "Q6xFw5vx/oM5ENQirLqL0J/dqe/da3+oT/30u4DZ2Uk=",
+                  "size": 4739
+                }
+              ]
+            },
+            {
+              "name": "sonner-loader",
+              "path": "frontend/web-components/sonner-loader",
+              "type": "directory",
+              "size": 4416,
+              "children": [
+                {
+                  "name": "index.html",
+                  "path": "frontend/web-components/sonner-loader/index.html",
+                  "type": "file",
+                  "hash": "VcS4/8Tetx1B13xncr2dVywx+ZPTyuCVAk798ckjNj4=",
+                  "size": 3763
+                },
+                {
+                  "name": "index.js",
+                  "path": "frontend/web-components/sonner-loader/index.js",
+                  "type": "file",
+                  "hash": "Ge06xKbUDQGObwCdEhb44r9swsgsnVDoGghUlMZe0c8=",
+                  "size": 653
+                }
+              ]
+            },
+            {
+              "name": "base-web-element.js",
+              "path": "frontend/web-components/base-web-element.js",
+              "type": "file",
+              "hash": "aHbpDTHQ+Gsbvt+9PJ5sHrPTWVsfK1ZJBkZIxWGlKs0=",
+              "size": 1973
+            },
+            {
+              "name": "fancy-separator.js",
+              "path": "frontend/web-components/fancy-separator.js",
+              "type": "file",
+              "hash": "Pb4Kvh/4CZYWvPe80FTqOLaTbvOPoxrjJVaSMgcavj8=",
+              "size": 1072
+            },
+            {
+              "name": "script.js",
+              "path": "frontend/web-components/script.js",
+              "type": "file",
+              "hash": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+              "size": 0
+            },
+            {
+              "name": "sonner.js",
+              "path": "frontend/web-components/sonner.js",
+              "type": "file",
+              "hash": "B9r7tan2RtQCfRIxXfH9SsEMCyawuKyztuywl0ywbrE=",
+              "size": 3462
+            },
+            {
+              "name": "sonner.type.ts",
+              "path": "frontend/web-components/sonner.type.ts",
+              "type": "file",
+              "hash": "e1qlHLmZ5pfs5e6mgF9zFC3a/24TjRgskLZ7L8E3hqo=",
+              "size": 1107
+            }
+          ]
+        },
+        {
+          "name": "closed-npm.svg",
+          "path": "frontend/closed-npm.svg",
+          "type": "file",
+          "hash": "CZBIAJI6HfgYYpOk32zxfcWsgo3ci9hwsy39lUvYMJw=",
+          "size": 529
+        },
+        {
+          "name": "global.d.ts",
+          "path": "frontend/global.d.ts",
+          "type": "file",
+          "hash": "sir+iv/ZD8SilHLHa2aBClGEVfdcQHDS6FlNzOErGqs=",
+          "size": 382
+        },
+        {
+          "name": "index.css",
+          "path": "frontend/index.css",
+          "type": "file",
+          "hash": "7dZ+NFr2irwX3Cr95ujOqavPXODqLqeQ7b45P3RAeuA=",
+          "size": 15522
+        },
+        {
+          "name": "index.html",
+          "path": "frontend/index.html",
+          "type": "file",
+          "hash": "0pui4RdigCTYsHXtjj1M4Q23ecOsSuLRRNf6LbVySF4=",
+          "size": 19986
+        },
+        {
+          "name": "index.js",
+          "path": "frontend/index.js",
+          "type": "file",
+          "hash": "ydb/4oBuQdq93KyHEFpjmUurQLPbGhvGEtjX7OA7ucs=",
+          "size": 44568
+        },
+        {
+          "name": "index.type.ts",
+          "path": "frontend/index.type.ts",
+          "type": "file",
+          "hash": "6i5DPe79OQkgaz6Fd10vRW5jrAMnz7h6Yf+vaWbWC60=",
+          "size": 6388
+        },
+        {
+          "name": "insight.html",
+          "path": "frontend/insight.html",
+          "type": "file",
+          "hash": "srDvG0oXCWvCmWpz3k/xAGEZR1J2HmUfhvAwIL+wSEE=",
+          "size": 6591
+        },
+        {
+          "name": "insight.js",
+          "path": "frontend/insight.js",
+          "type": "file",
+          "hash": "A4qt5tF1oQXndhdKOZMq20cHrJkxggTWwZYMubZ5byk=",
+          "size": 19279
+        },
+        {
+          "name": "insight.type.ts",
+          "path": "frontend/insight.type.ts",
+          "type": "file",
+          "hash": "DWe3FEvfbEV65VmDlXDQy6cmqRK1N5limQYgpGOuGA0=",
+          "size": 443
+        },
+        {
+          "name": "light-tailwind.css",
+          "path": "frontend/light-tailwind.css",
+          "type": "file",
+          "hash": "+d5WPykYH533VpSFSTAv4DrVEZV2VTaOMSUbiRRf9+A=",
+          "size": 578
+        },
+        {
+          "name": "main.js",
+          "path": "frontend/main.js",
+          "type": "file",
+          "hash": "htMguTX94/sb++eTyvPrdA61MIoLmE/CCPfLkJPrdKc=",
+          "size": 645
+        },
+        {
+          "name": "npm.svg",
+          "path": "frontend/npm.svg",
+          "type": "file",
+          "hash": "qbPJHzPjVIkDEscvwxord6rRChDhvkgxg4s4sy5QTkU=",
+          "size": 341
+        },
+        {
+          "name": "README.md",
+          "path": "frontend/README.md",
+          "type": "file",
+          "hash": "1FZcLMpRqwveQ7cC9DfCCg8Tjylxljct9821vCkfAfo=",
+          "size": 831
+        },
+        {
+          "name": "README.zh.md",
+          "path": "frontend/README.zh.md",
+          "type": "file",
+          "hash": "gxRNkzP3QqySeLVJaZeSSfJCIS08w281EN7F6iViUDA=",
+          "size": 834
+        },
+        {
+          "name": "styles.css",
+          "path": "frontend/styles.css",
+          "type": "file",
+          "hash": "JsfhdayE3t+X4EOKLHHPbk8nG9hUqJEI0s7xIH1s+5Y=",
+          "size": 1791
+        }
+      ]
+    },
+    {
+      "name": "scripts",
+      "path": "scripts",
+      "type": "directory",
+      "size": 11599,
+      "children": [
+        {
+          "name": "check-before-publish.js",
+          "path": "scripts/check-before-publish.js",
+          "type": "file",
+          "hash": "85LuLw2H8H/FZ1Kpc5JaG0x0494zhm5KY3ltI76RFig=",
+          "size": 8571
+        },
+        {
+          "name": "check.type.ts",
+          "path": "scripts/check.type.ts",
+          "type": "file",
+          "hash": "xlmOG27jsEknlKm4FFPhtpuAf+GkB9wNrC4RYoMif8M=",
+          "size": 374
+        },
+        {
+          "name": "create-web-component.js",
+          "path": "scripts/create-web-component.js",
+          "type": "file",
+          "hash": "hs/rfu9YJHCKu3OtgxN+OJ6YB0BQrb6WbSWvbsgduq4=",
+          "size": 2654
+        }
+      ]
+    },
+    {
+      "name": "shared",
+      "path": "shared",
+      "type": "directory",
+      "size": 4017,
+      "children": [
+        {
+          "name": "utils",
+          "path": "shared/utils",
+          "type": "directory",
+          "size": 4017,
+          "children": [
+            {
+              "name": "light-lodash.js",
+              "path": "shared/utils/light-lodash.js",
+              "type": "file",
+              "hash": "/yZYtcFOKRn8wJ78qDZEWEooEGJpX/GIcQ6njjxE5TQ=",
+              "size": 4017
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "package.json",
+      "path": "package.json",
+      "type": "file",
+      "hash": "Sun4kLG0tZsQJM+rD6r0SXyr4jleXt75MtQnAvfNLvI=",
+      "size": 1952
+    },
+    {
+      "name": "README.md",
+      "path": "README.md",
+      "type": "file",
+      "hash": "onKZPWh/ih/KxY51sQtulFglx1cwyijtNjVwIIURjfM=",
+      "size": 1080
+    },
+    {
+      "name": "README.zh.md",
+      "path": "README.zh.md",
+      "type": "file",
+      "hash": "kia+XaCp96gGRaC60Tdi7br39+834M+nL7TzOuhi6vM=",
+      "size": 1299
+    }
+  ]
+}

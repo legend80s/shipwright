@@ -7,12 +7,12 @@ import readline from "node:readline"
 import { styleText } from "node:util"
 import { colors, cyan, green, red } from "../utils/colors.js"
 import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
+import { flattenTree, groupAndSortByFileCount, printDiff } from "./diff.js"
 
-/** @import { NpmPackDryRunJSONItem, NpmPackDryRunJSON, Logger, NpmPkgResp, NpmxPkgFilesResp } from './type.js' */
+/** @import { NpmPackDryRunJSONItem, NpmPackDryRunJSON, Logger, NpmPkgResp, NpmxPkgFilesResp, DryRunFiles } from './type.js' */
 
 /** @typedef {number} int */
-/** @typedef {NpmPackDryRunJSONItem['files'][0]} File */
-/** @typedef {`${string}/${string}`} Directory */
+/** @typedef {NpmPackDryRunJSONItem['files'][0]} DryRunFileInfo */
 
 const testing = false
 const fileCountOverlimit = true
@@ -30,11 +30,11 @@ export async function check(values, logger) {
 
   const {
     diff,
-    version,
+    // version,
     totalFiles,
     prevFileCount,
     prevVersion,
-    files,
+    files: dryRunResultFiles,
     prevUnpackedSize,
     unpackedSize,
   } = await fetchDiff(pkgName, verbose, logger)
@@ -52,33 +52,50 @@ export async function check(values, logger) {
   const isPackageSizeOverThreshold = Math.abs(diff.unpackedSize) >= threshold.unpackedSize
 
   if (isFileCountOverThreshold) {
-    handleFileCountThresholdExceeded()
+    handleFileCountThresholdExceeded(prevVersion)
   } else if (isPackageSizeOverThreshold) {
-    handlePackageSizeThresholdExceeded()
+    handlePackageSizeThresholdExceeded(prevVersion)
   } else {
     logger.success(
       `✅ File count check success: diff (${Math.abs(diff.fileCount)}) < threshold (${threshold.fileCount}). Ready to publish!`,
     )
   }
 
-  function handlePackageSizeThresholdExceeded() {
+  /** @param {string} prevVersion */
+  function handlePackageSizeThresholdExceeded(prevVersion) {
     const msg =
       `To publish package size: ${red(unpackedSize)}, but previous published ` +
       green(`v${prevVersion}`) +
       ` size: ${green(prevUnpackedSize)}. Package size diff ${diff.unpackedSize}% ${red("❯=")} threshold ${threshold.unpackedSize}%.`
     logger.error(colors.RESET + msg + colors.RESET)
 
-    showConfirm()
+    handleThresholdExceeded(prevVersion)
   }
 
-  function handleFileCountThresholdExceeded() {
+  /** @param {string} prevVersion */
+  async function handleFileCountThresholdExceeded(prevVersion) {
     const msg1 =
       `To publish file count: ${red(totalFiles)}, but previous published ` +
       green(`v${prevVersion}`) +
       ` file count: ${green(prevFileCount)}. Count diff (Math.abs(${totalFiles} - ${prevFileCount}) = ${diff.fileCount}) ${red("❯=")} threshold (${green(threshold.fileCount)}).`
     logger.error(colors.RESET + msg1 + colors.RESET)
 
-    printFilesStats(logger, files)
+    handleThresholdExceeded(prevVersion)
+  }
+
+  /** @param {string} prevVersion */
+  async function handleThresholdExceeded(prevVersion) {
+    // Print diff vs baseline and only show dry run file stats if baseline fetch erred.
+    try {
+      const lastPublishedFiles = flattenTree(
+        (await fetchNpmxPkgFiles(pkgName, prevVersion, logger)).tree,
+      )
+      printDiff({ lastPublishedFiles, dryRunResultFiles })
+    } catch (error) {
+      logger.debug(error)
+
+      printFilesStats(logger, dryRunResultFiles)
+    }
 
     showConfirm()
   }
@@ -178,13 +195,7 @@ async function fetchDiffCore(pkgName, logger) {
 
   logger.debug(`Previous published v${prevVersion}:`, { prevFileCount, prevUnpackedSize })
 
-  const {
-    name,
-    entryCount: totalFiles,
-    version,
-    files,
-    unpackedSize,
-  } = await fetchToPublishInfo(pkgName)
+  const { name, entryCount: totalFiles, version, files, unpackedSize } = fetchToPublishInfo(pkgName)
 
   const msgWrongDir = `Check if \`${PACK_DRY_RUN_CMD}\` ran in the wrong directory.`
   if (name !== pkgName) {
@@ -322,9 +333,31 @@ async function fetchFileStats(pkgName, version, logger) {
   // if (!json) {
   // 2. Fetch from npmx
   // logger.warn(`pkg fils count not found by npm (${api}), trying npmx`)
+  // https://npmx.dev/api/registry/files/sse-stuntman/v/1.1.2
+  const json = await fetchNpmxPkgFiles(pkgName, version, logger)
+
+  return accumulateFiles(json.tree)
+  // }
+
+  // return json.fileCount
+}
+
+/**
+ * @param {string} pkgName
+ * @param {string} version
+ * @param {Logger} logger
+ * @returns {Promise<NpmxPkgFilesResp>}
+ */
+async function fetchNpmxPkgFiles(pkgName, version, logger) {
+  // @ts-expect-error
+  if (fetchNpmxPkgFiles.promise) {
+    // @ts-expect-error
+    return fetchNpmxPkgFiles.promise
+  }
   const api = `https://npmx.dev/api/registry/files/${pkgName}/v/${version}`
   logger.info(`Try fetch pkg fils count by npmx (${api})`)
-  const json = await safeAsyncCall(
+  // @ts-expect-error
+  fetchNpmxPkgFiles.promise = safeAsyncCall(
     () => /** @type {Promise<NpmxPkgFilesResp>} */ (fetchJSON(api)),
     {
       onError: (err) => {
@@ -333,15 +366,15 @@ async function fetchFileStats(pkgName, version, logger) {
     },
   )
 
+  // @ts-expect-error
+  const json = await fetchNpmxPkgFiles.promise
+
   if (!json) {
     logger.error(`❌ pkg files fetch failed by ${api}`)
     throw new Error(`❌ pkg files fetch failed by ${api} and ${api}`)
   }
 
-  return accumulateFiles(json.tree)
-  // }
-
-  // return json.fileCount
+  return json
 }
 
 /**
@@ -371,9 +404,9 @@ export function accumulateFiles(nodes) {
 
 /**
  * @param {string} pkgName
- * @returns {Promise<Pick<NpmPackDryRunJSONItem, 'name' | 'version' | 'entryCount' | 'files' | 'unpackedSize'>>}
+ * @returns {Pick<NpmPackDryRunJSONItem, 'name' | 'version' | 'entryCount' | 'files' | 'unpackedSize'>}
  */
-async function fetchToPublishInfo(pkgName) {
+function fetchToPublishInfo(pkgName) {
   if (testing) {
     const entryCount = fileCountOverlimit ? 659 : 86
     const unpackedSize = packageSizeOverlimit ? 18979 : 16978
@@ -395,41 +428,12 @@ async function fetchToPublishInfo(pkgName) {
 }
 
 /**
- *
- * @param {string | undefined} filepath
- * @returns {filepath is Directory}
- */
-function isDir(filepath) {
-  return !!filepath && !filepath.includes(".")
-}
-
-/**
  * @param {Logger} logger
- * @param {Readonly<Readonly<File>[]>} files
+ * @param {DryRunFiles} files
  */
 function printFilesStats(logger, files) {
   // group by second level dir if no second level dir use first lever fallback to whole file name
-  const grouped = files.reduce(
-    (acc, file) => {
-      const [first, second] = file.path.split("/")
-      // if (file.path.includes("assets")) {
-      //   console.log("assets", file.path)
-      // }
-      if (isDir(second)) {
-        acc[second] = [...(acc[second] || []), file]
-      } else if (isDir(first)) {
-        assert(first)
-        acc[first] = [...(acc[first] || []), file]
-      } else {
-        acc[file.path] = [...(acc[file.path] || []), file]
-      }
-
-      return acc
-    },
-    /** @type {Record<string, File[]>} */ ({}),
-  )
-
-  const sorted = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length)
+  const sorted = groupAndSortByFileCount(files)
 
   console.log()
   logger.info(

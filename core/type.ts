@@ -35,7 +35,9 @@ export type NpmPackDryRunJSONItem = Readonly<{
   bundled: []
 }>
 
-interface File {
+export type DryRunFiles = NpmPackDryRunJSONItem["files"]
+
+type File = {
   path: string
   size: number
   mode: number

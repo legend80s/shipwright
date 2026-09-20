@@ -1,6 +1,6 @@
 import assert from "node:assert"
 import test from "node:test"
-import { accumulateFiles } from "./check-before-publish.js"
+import { accumulateFiles } from "../core/check-before-publish.js"
 
 test("accumulateFiles", () => {
   const input = getWalkingLogFilesResp()
