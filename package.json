@@ -16,7 +16,7 @@
     "typecheck": "tsgo --noEmit --resolveJsonModule",
     "info1": "echo %npm_package_name%",
     "info2": "echo $npm_package_name",
-    "check-files-to-publish": "node ./index.js --name=%npm_package_name% --threshold-count=5 --throw --no-silent",
+    "check-files-to-publish": "shipwright --silent",
     "test": "node --test",
     "pub:patch": "npm version patch",
     "pub:minor": "npm version minor",
@@ -39,7 +39,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.20.3"
+    "@types/node": "^22.20.3",
+    "npm-shipwright": "^0.1.0"
   },
   "dependencies": {
     "walking-log": "^1.0.0"
