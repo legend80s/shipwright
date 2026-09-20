@@ -6,7 +6,7 @@
   "description": "Test playground for shipwright",
   "main": "index.js",
   "scripts": {
-    "check-files-to-publish": "node ../index.js --threshold=5 --throw --silent",
+    "check-files-to-publish": "node ../index.js --threshold-count=5 --throw --silent",
     "pub:patch": "npm version patch",
     "pub:minor": "npm version minor",
     "pub:major": "npm version major",

@@ -9,9 +9,10 @@
   },
   "scripts": {
     "typecheck": "tsgo --noEmit --resolveJsonModule",
-    "info": "echo 正在运行 %npm_package_name%",
-    "check-files-to-publish": "node ./index.js --name=%npm_package_name% --threshold=5 --throw --no-silent",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "info1": "echo %npm_package_name%",
+    "info2": "echo $npm_package_name",
+    "check-files-to-publish": "node ./index.js --name=%npm_package_name% --threshold-count=5 --throw --no-silent",
+    "test": "echo TODO",
     "pub:patch": "npm version patch",
     "pub:minor": "npm version minor",
     "pub:major": "npm version major",

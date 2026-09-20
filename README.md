@@ -24,7 +24,7 @@ npx npm-shipwright
 > Or with customized threshold values:
 
 ```sh
-npx npm-shipwright --threshold-count 5 --threshold-size 10%
+npx npm-shipwright --threshold-count 5 --threshold-size 10
 ```
 
 Exits `success` if both deviations are within their thresholds, `error` otherwise.
