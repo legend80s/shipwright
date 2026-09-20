@@ -14,8 +14,8 @@ import { fetchJSON, safeAsyncCall } from "../utils/light-lodash.js"
 /** @typedef {NpmPackDryRunJSONItem['files'][0]} File */
 /** @typedef {`${string}/${string}`} Directory */
 
-const testing = true
-const fileCountOverlimit = false
+const testing = false
+const fileCountOverlimit = true
 const packageSizeOverlimit = true
 
 const PACK_DRY_RUN_CMD = `npm pack --dry-run`
