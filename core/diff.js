@@ -131,14 +131,14 @@ export function printDiff({ lastPublishedFiles, dryRunResultFiles }) {
   })
   // print equals
   console.log()
-  logHeader("h3", gray("🔒 EQUAL"))
+  logHeader("h3", "🔒 EQUAL")
 
   const LIMIT = 10
 
   len = equals.length.toString().length
   equals.slice(0, LIMIT).forEach(({ filename, count, baseline }, index) => {
     console.info(
-      `${cyan((index + 1).toString().padStart(len, "0"))}. ${filename}:`,
+      `${cyan((index + 1).toString().padStart(len, "0"))}. ${green("✔")} ${filename}:`,
       count,
       `(${gray(baseline)})`,
     )
