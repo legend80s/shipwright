@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { parseArgs, styleText } from "node:util"
 import { createLogger, LEVEL } from "walking-log"
 import { check } from "./core/check-before-publish.js"
