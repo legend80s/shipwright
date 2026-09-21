@@ -207,7 +207,7 @@ async function fetchDiffCore(pkgName, logger) {
 
   // diffUnpackedSizeInPercent can be negative
   const diffUnpackedSizeInPercent = Number(
-    (((unpackedSize - prevUnpackedSize) / prevUnpackedSize) * 100).toFixed(0),
+    (((unpackedSize - prevUnpackedSize) / prevUnpackedSize) * 100).toFixed(2),
   )
 
   logger.info(
